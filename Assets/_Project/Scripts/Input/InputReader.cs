@@ -29,9 +29,15 @@ namespace Plataformer
                 
             
             }
-            inputActions.Enable();
+            
         }
 
+        public void EnablePlayerActions()
+        {
+
+            inputActions.Enable();
+
+        }
         public void OnFire(InputAction.CallbackContext context)
         {
            //noop
