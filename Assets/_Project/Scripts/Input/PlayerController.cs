@@ -1,6 +1,7 @@
 ﻿using Cinemachine;
 using KBCore.Refs;
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Plataformer
@@ -8,7 +9,8 @@ namespace Plataformer
     public class PlayerController: ValidatedMonoBehaviour 
     {
         [Header("References")]
-        [SerializeField,Self] CharacterController controller;
+        //[SerializeField,Self] CharacterController controller;
+        [SerializeField,Self] Rigidbody rb;
         [SerializeField, Self] Animator animator;
         [SerializeField, Anywhere] CinemachineFreeLook freeLookVCam;
         [SerializeField, Anywhere] InputReader input;
@@ -25,6 +27,8 @@ namespace Plataformer
         float currentSpeed;
         float velocity;
 
+        Vector3 movement;
+
         //Animator parameters
         static readonly int Speed = Animator.StringToHash("Speed");
 
@@ -40,6 +44,8 @@ namespace Plataformer
                 transform,
                 transform.position - freeLookVCam.transform.position - Vector3.forward
                 );
+
+            rb.freezeRotation = true;
             
         }
 
@@ -47,8 +53,14 @@ namespace Plataformer
 
         void Update()
         {
-            HandleMovement();
+            movement = new Vector3(input.Direction.x, 0f,input.Direction.y);
+            
             UpdateAnimator();
+        }
+        private void FixedUpdate()
+        {
+            // HandleJump();
+            HandleMovement();
         }
 
         void UpdateAnimator()
@@ -59,13 +71,13 @@ namespace Plataformer
         void HandleMovement()
         {
 
-            var movementDirection = new Vector3(input.Direction.x, 0f, input.Direction.y).normalized;
+            
             //Rotate movement direction to match camera rotation
-            var adjustedDirection = Quaternion.AngleAxis(mainCam.eulerAngles.y, Vector3.up) * movementDirection;
+            var adjustedDirection = Quaternion.AngleAxis(mainCam.eulerAngles.y, Vector3.up) * movement;
             if(adjustedDirection.magnitude > ZeroF)
             {
                 HandleRotation(adjustedDirection);
-                HandleCharacterController(adjustedDirection);
+                HandleHorizontalController(adjustedDirection);
                 SmoothSpeed(adjustedDirection.magnitude);
 
             }
@@ -73,15 +85,18 @@ namespace Plataformer
 
                 SmoothSpeed(ZeroF);
 
+                //Reset horizontal velocity for a snappy stop
+                rb.velocity = new Vector3(ZeroF,rb.velocity.y,ZeroF);
+
             }
 
         }
 
-         void HandleCharacterController(Vector3 adjustedDirection)
+         void HandleHorizontalController(Vector3 adjustedDirection)
         {
             //Mexer o player
-            var adjustedMovement = adjustedDirection * (moveSpeed * Time.deltaTime);
-            controller.Move(adjustedMovement);
+            Vector3 velocity = adjustedDirection * moveSpeed *Time.fixedDeltaTime;
+            rb.velocity = new Vector3(velocity.x, rb.velocity.y, velocity.z);
             
         }
 
