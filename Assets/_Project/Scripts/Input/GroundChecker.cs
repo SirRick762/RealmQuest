@@ -1,6 +1,7 @@
-﻿﻿using UnityEngine;
+﻿using UnityEngine;
 
-namespace Platformer {
+namespace Platformer
+{
     public class GroundChecker : MonoBehaviour {
         
         [SerializeField] float groundDistance = 0.06f;
