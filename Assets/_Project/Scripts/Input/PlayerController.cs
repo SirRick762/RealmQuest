@@ -1,5 +1,6 @@
 ﻿using Cinemachine;
 using KBCore.Refs;
+using Platformer;
 using System;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -9,8 +10,8 @@ namespace Plataformer
     public class PlayerController: ValidatedMonoBehaviour 
     {
         [Header("References")]
-        //[SerializeField,Self] CharacterController controller;
-        [SerializeField,Self] Rigidbody rb;
+        [SerializeField, Self] Rigidbody rb;
+        [SerializeField, Self] GroundChecker groundChecker;
         [SerializeField, Self] Animator animator;
         [SerializeField, Anywhere] CinemachineFreeLook freeLookVCam;
         [SerializeField, Anywhere] InputReader input;
