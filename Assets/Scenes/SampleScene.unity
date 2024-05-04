@@ -262,7 +262,7 @@ GameObject:
   - component: {fileID: 294265227}
   - component: {fileID: 294265226}
   - component: {fileID: 294265225}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Obstaculo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -446,7 +446,7 @@ GameObject:
   - component: {fileID: 438233278}
   - component: {fileID: 438233277}
   - component: {fileID: 438233276}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Obstaculo (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -738,6 +738,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7647134206250791342, guid: cc91c8ba8b9a34f4d99e70d721f60b64, type: 3}
       insertIndex: -1
       addedObject: {fileID: 755983907}
+    - targetCorrespondingSourceObject: {fileID: 7647134206250791342, guid: cc91c8ba8b9a34f4d99e70d721f60b64, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 755983909}
   m_SourcePrefab: {fileID: 100100000, guid: cc91c8ba8b9a34f4d99e70d721f60b64, type: 3}
 --- !u!1 &642530457
 GameObject:
@@ -1052,6 +1055,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 755983907}
+  groundChecker: {fileID: 755983909}
   animator: {fileID: 755983905}
   freeLookVCam: {fileID: 1701776689}
   input: {fileID: 11400000, guid: 5434a6f095584394c9ec176bbdaf64be, type: 2}
@@ -1115,9 +1119,25 @@ CapsuleCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.5
-  m_Height: 1.5
+  m_Height: 1.6
   m_Direction: 1
   m_Center: {x: 0, y: 0.7, z: 0}
+--- !u!114 &755983909
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 755983902}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 878c787afa4dde544844b6d4973389ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  groundDistance: 0.06
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 128
 --- !u!1 &858323855
 GameObject:
   m_ObjectHideFlags: 0
@@ -1417,6 +1437,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8189980434977739222, guid: 2dfbb63c9cdf7504faf4ff26b0581598, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1054698869}
+    - targetCorrespondingSourceObject: {fileID: 8189980434977739222, guid: 2dfbb63c9cdf7504faf4ff26b0581598, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1054698871}
   m_SourcePrefab: {fileID: 100100000, guid: 2dfbb63c9cdf7504faf4ff26b0581598, type: 3}
 --- !u!1 &1054698864 stripped
 GameObject:
@@ -1436,6 +1459,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 1054698869}
+  groundChecker: {fileID: 1054698871}
   animator: {fileID: 1054698866}
   freeLookVCam: {fileID: 1701776689}
   input: {fileID: 11400000, guid: 5434a6f095584394c9ec176bbdaf64be, type: 2}
@@ -1502,6 +1526,22 @@ CapsuleCollider:
   m_Height: 1.6
   m_Direction: 1
   m_Center: {x: 0, y: 0.7, z: 0}
+--- !u!114 &1054698871
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1054698864}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 878c787afa4dde544844b6d4973389ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  groundDistance: 0.06
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 128
 --- !u!1 &1191600697
 GameObject:
   m_ObjectHideFlags: 0
@@ -1535,7 +1575,6 @@ MonoBehaviour:
   - {fileID: 755983902}
   - {fileID: 1054698864}
   spawnPoint: {fileID: 1878640515}
-  label: {fileID: 0}
 --- !u!4 &1191600699
 Transform:
   m_ObjectHideFlags: 0
@@ -1958,7 +1997,7 @@ GameObject:
   - component: {fileID: 1878640514}
   - component: {fileID: 1878640513}
   - component: {fileID: 1878640512}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Chao
   m_TagString: Untagged
   m_Icon: {fileID: 0}

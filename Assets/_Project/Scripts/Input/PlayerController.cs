@@ -1,9 +1,9 @@
-﻿using Cinemachine;
+﻿using System.Collections.Generic;
+using Cinemachine;
 using KBCore.Refs;
 using Platformer;
-using System;
-using Unity.VisualScripting;
 using UnityEngine;
+using Utilities;
 
 namespace Plataformer
 {
@@ -16,10 +16,17 @@ namespace Plataformer
         [SerializeField, Anywhere] CinemachineFreeLook freeLookVCam;
         [SerializeField, Anywhere] InputReader input;
 
-        [Header("Settings")]
+        [Header("Movement Settings")]
         [SerializeField] float moveSpeed = 6f;
         [SerializeField] float rotationSpeed = 15f;
         [SerializeField] float smoothTime = 0.2f;
+
+        [Header("Jump Settings")]
+        [SerializeField] float jumpForce = 10f;
+        [SerializeField] float jumpDuration = 0.5f;
+        [SerializeField] float jumpCooldown = 0f;
+        [SerializeField] float jumpMaxHeight = 2f;
+        [SerializeField] float gravityMultiplier = 3f;
 
         const float ZeroF = 0f;
 
@@ -27,8 +34,13 @@ namespace Plataformer
 
         float currentSpeed;
         float velocity;
+        float jumpVelocity;
 
         Vector3 movement;
+
+        List<Timer> timers;
+        CountdownTimer jumpTimer;
+        CountdownTimer jumpCooldownTimer;
 
         //Animator parameters
         static readonly int Speed = Animator.StringToHash("Speed");
@@ -47,26 +59,95 @@ namespace Plataformer
                 );
 
             rb.freezeRotation = true;
-            
+
+            jumpTimer = new CountdownTimer(jumpDuration);
+            jumpCooldownTimer = new CountdownTimer(jumpCooldown);
+            timers = new List<Timer>(capacity: 2) { jumpTimer, jumpCooldownTimer };
+
+            jumpTimer.OnTimerStop += () => jumpCooldownTimer.Start();
         }
 
         void Start() => input.EnablePlayerActions();
 
+        void OnEnable()
+        {
+            input.Jump += OnJump;  
+        }
+
+        void OnDisable()
+        {
+            input.Jump -= OnJump;
+        }
+
+        void OnJump(bool performed)
+        {
+            if(performed && !jumpTimer.IsRunning && !jumpCooldownTimer.IsRunning && groundChecker.IsGrounded) 
+            {
+            
+                jumpTimer.Start();
+
+            }
+            else if(!performed && jumpTimer.IsRunning) {
+            
+            jumpTimer.Stop();
+            
+            }
+
+        }
+
         void Update()
         {
             movement = new Vector3(input.Direction.x, 0f,input.Direction.y);
-            
+
+            HandleTimers();
             UpdateAnimator();
         }
         private void FixedUpdate()
         {
-            // HandleJump();
+            HandleJump();
             HandleMovement();
         }
 
         void UpdateAnimator()
         {
             animator.SetFloat(Speed,currentSpeed);
+        }
+
+        void HandleTimers()
+        {
+            foreach(var timer in timers)
+            {
+                timer.Tick(Time.deltaTime);
+            }
+        }
+
+        void HandleJump()
+        {
+            if(!jumpTimer.IsRunning && groundChecker.IsGrounded) {
+                jumpVelocity = ZeroF;
+                jumpTimer.Stop();
+                return;
+            }
+
+            if (jumpTimer.IsRunning)
+            {
+                float launchPoint = 0.9f;
+                if(jumpTimer.Progress > launchPoint)
+                {
+                    jumpVelocity = Mathf.Sqrt(2 * jumpMaxHeight * Mathf.Abs(Physics.gravity.y));
+                }
+                else {
+
+                    jumpVelocity += (1 - jumpTimer.Progress) * jumpForce * Time.fixedDeltaTime;
+                }
+            }
+
+            else
+            {
+               jumpVelocity += Physics.gravity.y * gravityMultiplier * Time.fixedDeltaTime;
+            }
+
+            rb.velocity = new Vector3(rb.velocity.x, jumpVelocity, rb.velocity.z);
         }
 
         void HandleMovement()

@@ -47,11 +47,12 @@ namespace Plataformer
 
         public void OnJump(InputAction.CallbackContext context)
         {
-           switch (context.phase) {
-            case InputActionPhase.Started:
+            switch (context.phase)
+            {
+                case InputActionPhase.Started:
                     Jump.Invoke(true);
                     break;
-            case InputActionPhase.Canceled:
+                case InputActionPhase.Canceled:
                     Jump.Invoke(false);
                     break;
             }
