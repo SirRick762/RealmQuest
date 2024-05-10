@@ -49,13 +49,13 @@ namespace Plataformer
             UpdateLightSettings();
             UpdateSkyBlend();
 
-            if(Input.GetKeyDown(KeyCode.Space)) {
-                timeSettings.timeMultiplier *= 2;
-            }
+            //if(Input.GetKeyDown(KeyCode.Space)) {
+            //    timeSettings.timeMultiplier *= 2;
+            //}
 
-            if(Input.GetKeyDown(KeyCode.LeftShift)) { 
-                timeSettings.timeMultiplier /= 2;
-            }
+            //if(Input.GetKeyDown(KeyCode.LeftShift)) { 
+            //    timeSettings.timeMultiplier /= 2;
+            //}
         }
 
         void UpdateSkyBlend()

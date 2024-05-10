@@ -16,6 +16,7 @@ namespace Plataformer
         public event UnityAction EnableMouseControlCamera= delegate { };
         public event UnityAction DisableMouseControlCamera = delegate { };
         public event UnityAction<bool> Jump = delegate { };
+        public event UnityAction<bool> Dash = delegate { };
 
 
         PlayerInputActions inputActions;
@@ -79,14 +80,27 @@ namespace Plataformer
             }
         }
 
+        public void OnRun(InputAction.CallbackContext context)
+        {
+            switch(context.phase) {
+                case InputActionPhase.Started:
+                    Dash.Invoke(true); 
+                    break;
+                case InputActionPhase.Canceled:
+                    Dash.Invoke(false);
+                    break;
+            
+            }
+
+
+
+        }
+
         public void OnMove(InputAction.CallbackContext context)
         {
             Move.Invoke(arg0: context.ReadValue<Vector2>());
         }
 
-        public void OnRun(InputAction.CallbackContext context)
-        {
-            //noop
-        }
+      
     }
 }
