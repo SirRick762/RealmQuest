@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using DG.Tweening;
 
-namespace Platformer
+namespace Plataformer
 {
     public class PlataformMover : MonoBehaviour {
 

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Plataformer;
 
-namespace Platformer
+namespace Plataformer
 {
     public class StateMachine
     {

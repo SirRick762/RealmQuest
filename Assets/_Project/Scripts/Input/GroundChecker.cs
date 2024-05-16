@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Platformer
+namespace Plataformer
 {
     public class GroundChecker : MonoBehaviour {
         

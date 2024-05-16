@@ -1,7 +1,7 @@
 ﻿using Plataformer;
 using UnityEngine;
 
-namespace Platformer
+namespace Plataformer
 {
     public class LocomotionState : BaseState
     {

@@ -16,6 +16,10 @@ namespace Plataformer
             int selectedCharacter = PlayerPrefs.GetInt("selectedCharacter");
             GameObject prefab = characterPrefabs[selectedCharacter];
             GameObject clone = Instantiate(prefab, spawnPoint.position, Quaternion.identity);
+
+            // Assign the "Player" tag to the instantiated character clone
+            clone.tag = "Player";
+
             //label.text = prefab.name;
         }
     }
