@@ -1,6 +1,7 @@
 using KBCore.Refs;
 using UnityEngine;
 using UnityEngine.AI;
+using Utilities;
 
 namespace Plataformer
 {
@@ -13,10 +14,14 @@ namespace Plataformer
         [SerializeField, Child] Animator animator;
 
         [SerializeField] float wanderRadius = 30f;
+        [SerializeField] float timeBetweenAttacks = 1f;
 
         StateMachine stateMachine;
         EnemyChaseState chaseState;
         EnemyWanderState wanderState;
+        EnemyAttackState attackState;
+
+        CountdownTimer attackTimer;
 
         void OnValidate() => this.ValidateRefs();
 
@@ -24,16 +29,21 @@ namespace Plataformer
         {
             stateMachine = new StateMachine();
 
+            attackTimer = new CountdownTimer(timeBetweenAttacks);
+
             wanderState = new EnemyWanderState(this, animator, agent, wanderRadius);
             chaseState = new EnemyChaseState(this, animator, agent, playerDetector.Player);
+            attackState = new EnemyAttackState(this, animator, agent, playerDetector.Player);
 
             At(wanderState, chaseState, new FuncPredicate(() => playerDetector.CanDetectPlayer()));
             At(chaseState, wanderState, new FuncPredicate(() => !playerDetector.CanDetectPlayer()));
+            At(chaseState, attackState, new FuncPredicate(() => playerDetector.CanAttackPlayer()));
+            At(attackState, chaseState, new FuncPredicate(() => !playerDetector.CanAttackPlayer()));
 
             stateMachine.SetState(wanderState);
 
             // Subscribe to player detection events
-            playerDetector.OnPlayerDetected.AddListener(UpdatePlayerInChaseState);
+            playerDetector.OnPlayerDetected.AddListener(UpdatePlayerInStates);
         }
 
         void At(IState from, IState to, IPredicate condition) => stateMachine.AddTransition(from, to, condition);
@@ -42,6 +52,7 @@ namespace Plataformer
         void Update()
         {
             stateMachine.Update();
+            attackTimer.Tick(Time.deltaTime);
         }
 
         void FixedUpdate()
@@ -49,15 +60,24 @@ namespace Plataformer
             stateMachine.FixedUpdate();
         }
 
-        void UpdatePlayerInChaseState(Transform playerTransform)
+        public void Attack()
+        {
+            if (attackTimer.IsRunning) return;
+            attackTimer.Start();
+            Debug.Log("Attacking");
+            // Implement your attack logic here
+        }
+
+        void UpdatePlayerInStates(Transform playerTransform)
         {
             chaseState.UpdatePlayer(playerTransform);
+            attackState.UpdatePlayer(playerTransform);
         }
 
         private void OnDestroy()
         {
             // Unsubscribe from player detection events to avoid memory leaks
-            playerDetector.OnPlayerDetected.RemoveListener(UpdatePlayerInChaseState);
+            playerDetector.OnPlayerDetected.RemoveListener(UpdatePlayerInStates);
         }
     }
 }

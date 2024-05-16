@@ -27,7 +27,7 @@ namespace Plataformer
         [SerializeField] float gravityMultiplier = 3f;
 
         [Header("Dash Settings")]
-        [SerializeField] float dashForce = 10f;
+        [SerializeField] float dashForce = 5f;
         [SerializeField] float dashDuration = 1f;
         [SerializeField] float dashCooldown = 2f;
 
