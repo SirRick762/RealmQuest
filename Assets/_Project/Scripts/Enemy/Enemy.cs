@@ -65,6 +65,7 @@ namespace Plataformer
             if (attackTimer.IsRunning) return;
             attackTimer.Start();
             Debug.Log("Attacking");
+            playerDetector.PlayerHealth.TakeDamage(1);
             // Implement your attack logic here
         }
 

@@ -13,17 +13,22 @@ namespace Plataformer
         [SerializeField] float detectionCooldown = 1f;
         [SerializeField] float attackRange = 2f;
         public Transform Player { get; private set; }
+        public Health PlayerHealth { get; private set; }
 
         public UnityEvent<Transform> OnPlayerDetected;
 
         CountdownTimer detectionTimer;
         IDetectionStrategy detectionStrategy;
 
+        
+
         void Start()
         {
             detectionTimer = new CountdownTimer(detectionCooldown);
             detectionStrategy = new ConeDetectionStrategy(detectionAngle, detectionRadius, innerDetectionRadius);
             StartCoroutine(FindPlayer());
+            PlayerHealth = Player.GetComponent<Health>();
+
         }
 
         void Update() => detectionTimer.Tick(Time.deltaTime);

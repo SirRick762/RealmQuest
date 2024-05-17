@@ -17,6 +17,7 @@ namespace Plataformer
         public event UnityAction DisableMouseControlCamera = delegate { };
         public event UnityAction<bool> Jump = delegate { };
         public event UnityAction<bool> Dash = delegate { };
+        public event UnityAction Attack = delegate { };
 
 
         PlayerInputActions inputActions;
@@ -43,7 +44,10 @@ namespace Plataformer
         }
         public void OnFire(InputAction.CallbackContext context)
         {
-           //noop
+           if(context.phase == InputActionPhase.Started)
+            {
+                Attack.Invoke();
+            }
         }
 
         public void OnJump(InputAction.CallbackContext context)

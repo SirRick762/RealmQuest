@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using Cinemachine;
 using KBCore.Refs;
+using Unity.VisualScripting;
 using UnityEngine;
 using Utilities;
+using Timer = Utilities.Timer;
 
 namespace Plataformer
 {
@@ -31,6 +33,11 @@ namespace Plataformer
         [SerializeField] float dashDuration = 1f;
         [SerializeField] float dashCooldown = 2f;
 
+        [Header("Attack Settings")]
+        [SerializeField] float attackCooldown = 0.5f;
+        [SerializeField] float attackDistance = 1f;
+        [SerializeField] int attackDamage = 10;
+
         const float ZeroF = 0f;
 
         Transform mainCam;
@@ -47,6 +54,7 @@ namespace Plataformer
         CountdownTimer jumpCooldownTimer;
         CountdownTimer dashTimer;
         CountdownTimer dashCooldownTimer;
+        CountdownTimer attackTimer;
 
         StateMachine stateMachine;
         //Animator parameters
@@ -66,38 +74,56 @@ namespace Plataformer
                 );
 
             rb.freezeRotation = true;
+            SetupTimers();
+            SetupStateMachine();
+        }
 
-            jumpTimer = new CountdownTimer(jumpDuration);
-            jumpCooldownTimer = new CountdownTimer(jumpCooldown);
-        
-            jumpTimer.OnTimerStart += () => jumpVelocity = jumpForce;
-            jumpTimer.OnTimerStop += () => jumpCooldownTimer.Start();
-
-            dashTimer = new CountdownTimer(dashDuration);
-            dashCooldownTimer = new CountdownTimer(dashCooldown);
-            dashTimer.OnTimerStart += () => dashVelocity = dashForce;
-            dashTimer.OnTimerStop += () => {
-                dashVelocity = 1f;
-                dashCooldownTimer.Start();
-
-            };
-            
-            timers = new List<Timer>(capacity: 4) { jumpTimer, jumpCooldownTimer, dashTimer, dashCooldownTimer };
-
+        private void SetupStateMachine()
+        {
             //StateMachine
             stateMachine = new StateMachine();
             //declarar states
             var locomotionState = new LocomotionState(this, animator);
             var jumpState = new JumpState(this, animator);
             var dashState = new DashState(this, animator);
+            var attackState = new AttackState(this, animator);
             //definir transiçoes
             At(locomotionState, jumpState, new FuncPredicate(() => jumpTimer.IsRunning));
             At(locomotionState, dashState, new FuncPredicate(() => dashTimer.IsRunning));
-            Any(locomotionState, new FuncPredicate(() => groundChecker.IsGrounded && !jumpTimer.IsRunning && !dashTimer.IsRunning ));
-           
+            At(locomotionState, attackState, new FuncPredicate(() => attackTimer.IsRunning));
+            At(attackState,locomotionState, new FuncPredicate(() => !attackTimer.IsRunning));
+
+            Any(locomotionState, new FuncPredicate(() => groundChecker.IsGrounded && !attackTimer.IsRunning && !jumpTimer.IsRunning && !dashTimer.IsRunning));
+
+
 
             //estado inicial
             stateMachine.SetState(locomotionState);
+        }
+
+        private void SetupTimers()
+        {
+            jumpTimer = new CountdownTimer(jumpDuration);
+            jumpCooldownTimer = new CountdownTimer(jumpCooldown);
+
+            jumpTimer.OnTimerStart += () => jumpVelocity = jumpForce;
+            jumpTimer.OnTimerStop += () => jumpCooldownTimer.Start();
+
+            dashTimer = new CountdownTimer(dashDuration);
+            dashCooldownTimer = new CountdownTimer(dashCooldown);
+
+
+            dashTimer.OnTimerStart += () => dashVelocity = dashForce;
+            dashTimer.OnTimerStop += () =>
+            {
+                dashVelocity = 1f;
+                dashCooldownTimer.Start();
+
+            };
+
+            attackTimer = new CountdownTimer(attackCooldown);
+
+            timers = new List<Timer>(capacity: 5) { jumpTimer, jumpCooldownTimer, dashTimer, dashCooldownTimer, attackTimer };
         }
 
         void At(IState from, IState to, IPredicate condition) => stateMachine.AddTransition(from, to, condition);
@@ -109,12 +135,43 @@ namespace Plataformer
         {
             input.Jump += OnJump; 
             input.Dash += OnDash;
+            input.Attack += OnAttack;
         }
 
         void OnDisable()
         {
             input.Jump -= OnJump;
             input.Dash -= OnDash;
+            input.Attack -= OnAttack;
+        }
+
+        private void OnAttack()
+        {
+            if(!attackTimer.IsRunning)
+            {
+                attackTimer.Start();
+            }
+        }
+
+        public void Attack()
+        {
+            Vector3 attackPos = transform.position + transform.forward;
+            Collider[] hitEnemies = Physics.OverlapSphere(attackPos, attackDistance);
+
+            foreach(var enemy in hitEnemies)
+            {
+                Debug.Log(enemy.name);
+                if (enemy.CompareTag("Enemy"))
+                {
+                    enemy.GetComponent<Health>().TakeDamage(attackDamage);
+                    print("yo");
+                    if(enemy.GetComponent<Health>().IsDead)
+                    {
+                        enemy.gameObject.SetActive(false);
+                        print("morreu inimigo");
+                    }
+                }
+            }
         }
 
         void OnJump(bool performed)
