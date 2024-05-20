@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using Cinemachine;
 using KBCore.Refs;
 using Unity.VisualScripting;
@@ -167,12 +168,19 @@ namespace Plataformer
                     print("yo");
                     if(enemy.GetComponent<Health>().IsDead)
                     {
-                        enemy.gameObject.SetActive(false);
+                        StartCoroutine(die(enemy));
                         print("morreu inimigo");
                     }
                 }
             }
         }
+         IEnumerator die(Collider enemy)
+         {
+            enemy.GetComponentInChildren<Animator>().Play("Die");
+            yield return new WaitForSeconds(2f);
+            enemy.gameObject.SetActive(false);
+         }
+        
 
         void OnJump(bool performed)
         {
