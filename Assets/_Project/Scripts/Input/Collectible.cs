@@ -7,7 +7,7 @@ namespace Plataformer
     public class Collectible : Entity
     {
         [SerializeField] int score = 10;
-        [SerializeField] IntEventChannel scoreChannel;
+        [SerializeField] FloatEventChannel scoreChannel;
 
 
         private void OnTriggerEnter(Collider other)
