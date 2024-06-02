@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 2100000, guid: 62a16a0c8b430ec458f59c240ecad73d, type: 2}
+  m_SkyboxMaterial: {fileID: 2100000, guid: 102f035ad69b38540a0c3c1b5a62a313, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.08537375, g: 0.18888035, b: 0.43179262, a: 1}
+  m_IndirectSpecularColor: {r: 0.1070823, g: 0.18086159, b: 0.30401608, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -31280,7 +31280,7 @@ MonoBehaviour:
   dayAmbientLight: {r: 0.9547169, g: 0.9114326, b: 0.65389097, a: 0}
   nightAmbientLight: {r: 0.5792728, g: 0.50492704, b: 0.87169814, a: 0}
   volume: {fileID: 74476714}
-  skyboxMaterial: {fileID: 2100000, guid: 62a16a0c8b430ec458f59c240ecad73d, type: 2}
+  skyboxMaterial: {fileID: 2100000, guid: 102f035ad69b38540a0c3c1b5a62a313, type: 2}
   dial: {fileID: 325349058}
   timeSettings: {fileID: 11400000, guid: a9bed1f57820f5244ba102bdd9443626, type: 2}
 --- !u!4 &2072554808
