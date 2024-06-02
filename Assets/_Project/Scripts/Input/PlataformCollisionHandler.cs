@@ -2,31 +2,41 @@
 
 namespace Plataformer
 {
-    public class PlataformCollisionHandler : MonoBehaviour {
+    public class PlatformCollisionHandler : MonoBehaviour
+    {
+        Transform platform;
+        Vector3 offset;
+        bool onPlatform = false;
 
-        Transform plataform;
+        void Update()
+        {
+            if (onPlatform && platform != null)
+            {
+                // Keep the player at the same offset from the platform
+                transform.position = platform.position + offset;
+            }
+        }
 
         void OnCollisionEnter(Collision other)
         {
-            if (other.gameObject.CompareTag("MovingPlataform"))
+            if (other.gameObject.CompareTag("MovingPlatform"))
             {
-                ContactPoint contact = other.GetContact(index: 0);
+                ContactPoint contact = other.GetContact(0);
                 if (contact.normal.y < 0.5f) return;
 
-                plataform = other.transform;
-                transform.SetParent(plataform);
-
+                platform = other.transform;
+                offset = transform.position - platform.position;
+                onPlatform = true;
             }
         }
+
         void OnCollisionExit(Collision other)
         {
-            if (other.gameObject.CompareTag("MovingPlataform"))
+            if (other.gameObject.CompareTag("MovingPlatform"))
             {
-                transform.SetParent(null);
-                plataform = null;
-
+                platform = null;
+                onPlatform = false;
             }
         }
-
     }
 }

@@ -73,6 +73,7 @@ namespace Plataformer
                 transform,
                 transform.position - freeLookVCam.transform.position - Vector3.forward
                 );
+          
 
             rb.freezeRotation = true;
             SetupTimers();
