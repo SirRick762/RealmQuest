@@ -104,7 +104,15 @@ Material:
     m_Floats:
     - _AlphaClip: 0
     - _AlphaToMask: 0
+<<<<<<< Updated upstream
     - _Blend: 0
+=======
+<<<<<<< HEAD
+    - _Blend: 0.9999568
+=======
+    - _Blend: 0
+>>>>>>> b3f8e344edcddc37819080b1afffea58b85fe4f0
+>>>>>>> Stashed changes
     - _BlendModePreserveSpecular: 1
     - _BumpScale: 1
     - _ClearCoatMask: 0
