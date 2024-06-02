@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2f52467ce1a08748aacec8cfb9992c4, type: 3}
+  m_Name: Health
+  m_EditorClassIdentifier: 
+  prefab: {fileID: 8650142388492416693, guid: 724d6baa94913b14dad3fb90fbbca6ff, type: 3}
+  score: 10

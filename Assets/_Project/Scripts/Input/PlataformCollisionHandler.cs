@@ -19,7 +19,7 @@ namespace Plataformer
 
         void OnCollisionEnter(Collision other)
         {
-            if (other.gameObject.CompareTag("MovingPlatform"))
+            if (other.gameObject.CompareTag("MovingPlataform"))
             {
                 ContactPoint contact = other.GetContact(0);
                 if (contact.normal.y < 0.5f) return;
@@ -27,12 +27,13 @@ namespace Plataformer
                 platform = other.transform;
                 offset = transform.position - platform.position;
                 onPlatform = true;
+                print("plataforma");
             }
         }
 
         void OnCollisionExit(Collision other)
         {
-            if (other.gameObject.CompareTag("MovingPlatform"))
+            if (other.gameObject.CompareTag("MovingPlataform"))
             {
                 platform = null;
                 onPlatform = false;
