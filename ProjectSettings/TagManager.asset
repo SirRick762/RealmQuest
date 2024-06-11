@@ -9,6 +9,7 @@ TagManager:
   - Obstacle
   - Enemy
   - goal
+  - MovingPlatform
   layers:
   - Default
   - TransparentFX
